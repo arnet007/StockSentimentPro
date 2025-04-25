@@ -217,7 +217,16 @@ def render_sentiment_dashboard():
                     
                 if not news_df.empty:
                     st.subheader(f"News Sentiment Analysis for {sentiment_ticker}")
-                    st.write(f"Showing {len(news_df)} news articles from the past {days_back} days")
+                    # Show more articles for better analysis
+                    article_count = len(news_df)
+                    st.write(f"Showing {article_count} news articles from the past {days_back} days")
+                    
+                    # Add info about sentiment distribution
+                    positive_count = len(news_df[news_df['sentiment'] == 'positive'])
+                    negative_count = len(news_df[news_df['sentiment'] == 'negative'])
+                    neutral_count = len(news_df[news_df['sentiment'] == 'neutral'])
+                    
+                    st.write(f"Sentiment distribution: {positive_count} positive, {negative_count} negative, {neutral_count} neutral articles")
                     
                     # News sentiment over time
                     if 'date' in news_df.columns and 'compound' in news_df.columns:
@@ -337,7 +346,17 @@ def render_sentiment_dashboard():
                     
                 if not tweets_df.empty:
                     st.subheader(f"Social Media Sentiment Analysis for {sentiment_ticker}")
-                    st.write(f"Showing {len(tweets_df)} social media posts from the past {days_back} days")
+                    
+                    # Show comprehensive post count information
+                    tweet_count = len(tweets_df)
+                    st.write(f"Showing {tweet_count} social media posts from the past {days_back} days")
+                    
+                    # Add info about sentiment distribution
+                    positive_count = len(tweets_df[tweets_df['sentiment'] == 'positive'])
+                    negative_count = len(tweets_df[tweets_df['sentiment'] == 'negative'])
+                    neutral_count = len(tweets_df[tweets_df['sentiment'] == 'neutral'])
+                    
+                    st.write(f"Sentiment distribution: {positive_count} positive, {negative_count} negative, {neutral_count} neutral posts")
                     
                     # Social sentiment over time
                     if 'date' in tweets_df.columns and 'compound' in tweets_df.columns:
@@ -407,8 +426,8 @@ def render_sentiment_dashboard():
                     tweets_df['engagement'] = tweets_df['likes'] + tweets_df['retweets']
                     sorted_tweets = tweets_df.sort_values('engagement', ascending=False)
                     
-                    # Apply similar styling to social media posts as news
-                    for _, row in sorted_tweets.head(10).iterrows():
+                    # Show more social media posts (up to 50 instead of just 10)
+                    for _, row in sorted_tweets.head(50).iterrows():
                         # Determine sentiment color
                         sentiment_color = SENTIMENT_COLORS.get(row['sentiment'], SENTIMENT_COLORS['neutral'])
                         sentiment_text = row['sentiment'].upper()

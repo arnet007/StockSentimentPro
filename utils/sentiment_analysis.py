@@ -107,7 +107,7 @@ def analyze_sentiment(text):
 
 # Function to get news for a stock
 @st.cache_data(ttl=3600)  # Cache for 1 hour
-def get_stock_news(ticker, days=7, max_articles=10):
+def get_stock_news(ticker, days=7, max_articles=50):
     """
     Gets news articles for a stock from Yahoo Finance
     
@@ -229,7 +229,7 @@ def get_stock_news(ticker, days=7, max_articles=10):
 
 # Function to get tweets for a stock (mock function as Twitter API requires authentication)
 @st.cache_data(ttl=3600)  # Cache for 1 hour
-def get_stock_tweets(ticker, days=2, max_tweets=20):
+def get_stock_tweets(ticker, days=7, max_tweets=50):
     """
     Simulates getting tweets for a stock based on news data
     
@@ -286,9 +286,9 @@ def get_sentiment_summary(ticker):
     Returns:
     dict: Dictionary containing sentiment summary
     """
-    # Get news and tweets
-    news_df, news_error = get_stock_news(ticker, days=7)
-    tweets_df, tweets_error = get_stock_tweets(ticker, days=2)
+    # Get news and tweets with increased limits
+    news_df, news_error = get_stock_news(ticker, days=14, max_articles=50)
+    tweets_df, tweets_error = get_stock_tweets(ticker, days=7, max_tweets=50)
     
     # Initialize summary
     summary = {
