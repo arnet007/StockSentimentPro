@@ -120,32 +120,42 @@ def render_data_dashboard():
                 
         # Display stock information
         if info:
-            st.subheader(info.get("name", selected_ticker))
+            # Use markdown for company name to ensure it wraps properly
+            st.markdown(f"### {info.get('name', selected_ticker)}")
             
+            # Use 2 columns for metrics with better text wrapping
             metrics_col1, metrics_col2 = st.columns(2)
             
             with metrics_col1:
                 st.metric(
                     "Market Cap", 
-                    info.get("marketCapFormatted", "N/A")
+                    info.get("marketCapFormatted", "N/A"),
+                    help="Total market value of the company's outstanding shares"
                 )
                 st.metric(
                     "P/E Ratio", 
-                    f"{info.get('peRatio', 'N/A')}"
+                    f"{info.get('peRatio', 'N/A')}",
+                    help="Price to Earnings ratio"
                 )
                 
             with metrics_col2:
+                # Format the 52-week high to ensure it fits
+                fiftyTwoWeekHighValue = info.get('fiftyTwoWeekHigh', 'N/A')
+                currency = info.get('currency', '')
                 st.metric(
                     "52W High", 
-                    f"{info.get('fiftyTwoWeekHigh', 'N/A')} {info.get('currency', '')}"
+                    f"{fiftyTwoWeekHighValue} {currency}" if fiftyTwoWeekHighValue != "N/A" else "N/A",
+                    help="Highest price in the last 52 weeks"
                 )
                 st.metric(
                     "Dividend Yield", 
-                    info.get("dividendYieldFormatted", "N/A")
+                    info.get("dividendYieldFormatted", "N/A"),
+                    help="Annual dividend as percentage of share price"
                 )
-                
-            st.markdown(f"Exchange: **{info.get('exchange', 'N/A')}**")
-            st.markdown(f"Sector: **{info.get('sector', 'N/A')}**")
+            
+            # Use more compact display for additional information
+            st.markdown(f"<div style='font-size:0.9em'>Exchange: <b>{info.get('exchange', 'N/A')}</b> | Sector: <b>{info.get('sector', 'N/A')}</b></div>", 
+                        unsafe_allow_html=True)
             
             # Comparison section
             st.subheader("Compare with")

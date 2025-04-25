@@ -128,16 +128,52 @@ def get_stock_news(ticker, days=7, max_articles=10):
         if not news:
             return pd.DataFrame(), "No news found for this stock."
         
-        # Convert to DataFrame
-        news_df = pd.DataFrame(news)
+        # Process news data - the structure has changed in recent yfinance versions
+        processed_news = []
         
-        # Keep only relevant columns
-        if 'title' in news_df.columns and 'link' in news_df.columns:
-            news_df = news_df[['title', 'publisher', 'link', 'providerPublishTime']]
+        for item in news:
+            # Check if item has nested content structure (new format)
+            if 'content' in item and isinstance(item['content'], dict):
+                content = item['content']
+                news_item = {
+                    'title': content.get('title', 'No title'),
+                    'publisher': content.get('provider', {}).get('displayName', 'Unknown'),
+                    'link': content.get('clickThroughUrl', {}).get('url', ''),
+                    'date': content.get('pubDate', content.get('displayTime', '')),
+                }
+                processed_news.append(news_item)
+            # Fallback for older format
+            elif isinstance(item, dict):
+                news_item = {
+                    'title': item.get('title', 'No title'),
+                    'publisher': item.get('publisher', 'Unknown'),
+                    'link': item.get('link', ''),
+                    'date': item.get('providerPublishTime', '')
+                }
+                processed_news.append(news_item)
+        
+        # Convert to DataFrame
+        news_df = pd.DataFrame(processed_news)
+        
+        if news_df.empty:
+            return pd.DataFrame(), "Could not parse news data structure."
             
-            # Convert timestamp to datetime
-            news_df['date'] = pd.to_datetime(news_df['providerPublishTime'], unit='s')
-            
+        # Convert timestamp to datetime if it's in epoch format
+        if 'date' in news_df.columns:
+            # Try to convert if it's a string date
+            if news_df['date'].dtype == 'object':
+                try:
+                    news_df['date'] = pd.to_datetime(news_df['date'])
+                except:
+                    # If string conversion fails, provide a default recent date
+                    news_df['date'] = datetime.now()
+            else:
+                # Try to convert from unix timestamp
+                try:
+                    news_df['date'] = pd.to_datetime(news_df['date'], unit='s')
+                except:
+                    news_df['date'] = datetime.now()
+                
             # Filter by date
             cutoff_date = datetime.now() - timedelta(days=days)
             news_df = news_df[news_df['date'] >= cutoff_date]
@@ -154,7 +190,7 @@ def get_stock_news(ticker, days=7, max_articles=10):
             
             return news_df, None
         else:
-            return pd.DataFrame(), "Invalid news data format."
+            return pd.DataFrame(), "News data missing date information."
     except Exception as e:
         return pd.DataFrame(), f"Error fetching news: {str(e)}"
 
