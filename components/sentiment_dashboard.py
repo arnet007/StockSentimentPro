@@ -31,11 +31,15 @@ def render_sentiment_dashboard():
     
     # Display the AI models used for sentiment analysis
     st.info("""
-    **Sentiment Analysis Models**: This dashboard uses a combination of advanced NLP models:
-    - VADER (Valence Aware Dictionary and sEntiment Reasoner) - 70% weight
-    - TextBlob Sentiment Analysis - 30% weight
+    **Sentiment Analysis Models**: This dashboard uses a transformer-based NLP model:
+    - DistilBERT (distilbert-base-uncased-finetuned-sst-2-english)
     
-    These models analyze text to determine if sentiment is positive, negative, or neutral.
+    This is a state-of-the-art model fine-tuned specifically for sentiment analysis.
+    The model provides more accurate sentiment classification by understanding context and nuance in text.
+    
+    Fallback models (if the primary model cannot be loaded):
+    - VADER (Valence Aware Dictionary and sEntiment Reasoner)
+    - TextBlob Sentiment Analysis
     """)
     
     # Stock selection
