@@ -194,19 +194,22 @@ def get_stock_news(ticker, days=7, max_articles=10):
                 except:
                     news_df['date'] = pd.to_datetime(datetime.now())
             
-            # Convert datetime to UTC for consistent comparison
-            if hasattr(news_df['date'].dt, 'tz'):
-                # If timezone-aware, convert to UTC
-                news_df['date'] = news_df['date'].dt.tz_localize('UTC')
+            # Check if the datetime is timezone-aware
+            is_tz_aware = hasattr(news_df['date'].dt, 'tz') and news_df['date'].dt.tz is not None
+            
+            # Handle timezone-aware or naive datetimes
+            if is_tz_aware:
+                # Already timezone-aware, ensure they're in UTC
+                news_df['date'] = news_df['date'].dt.tz_convert('UTC')
             else:
-                # If naive datetime, assume UTC
-                news_df['date'] = news_df['date'].dt.tz_localize(None)
+                # Naive datetime, make it timezone-aware
+                news_df['date'] = news_df['date'].dt.tz_localize('UTC')
             
-            # Create a timezone-aware cutoff date
-            cutoff_date = pd.to_datetime(datetime.now() - timedelta(days=days))
+            # Create a timezone-aware cutoff date in UTC
+            cutoff_date = pd.to_datetime(datetime.now() - timedelta(days=days)).tz_localize('UTC')
             
-            # Filter by date - use timestamp comparison to avoid timezone issues
-            news_df = news_df[news_df['date'].dt.timestamp() >= cutoff_date.timestamp()]
+            # Filter by date using direct comparison (now both are tz-aware)
+            news_df = news_df[news_df['date'] >= cutoff_date]
             
             # Sort by date (newest first)
             news_df = news_df.sort_values('date', ascending=False)
