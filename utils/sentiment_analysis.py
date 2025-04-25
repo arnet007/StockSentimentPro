@@ -81,11 +81,48 @@ def get_stock_news(ticker, days=7, max_articles=50):
     try:
         import yfinance as yf
         
-        stock = yf.Ticker(ticker)
-        news = stock.news
-        
-        if not news:
-            return pd.DataFrame(), "No news found for this stock."
+        try:
+            stock = yf.Ticker(ticker)
+            news = stock.news
+            
+            if not news:
+                # Try a different approach if no news was returned
+                # Some tickers may need more custom handling
+                if ticker.endswith('.NS') or ticker.endswith('.BO'):
+                    # For Indian stocks, we can try to get news from a general source
+                    market_news_ticker = "^NSEI" if ticker.endswith('.NS') else "^BSESN"
+                    market_stock = yf.Ticker(market_news_ticker)
+                    market_news = market_stock.news
+                    
+                    if market_news:
+                        news = market_news
+                    else:
+                        return pd.DataFrame(), f"No news found for {ticker} or market index."
+                else:
+                    # For US stocks, try to get news from S&P 500
+                    market_stock = yf.Ticker("^GSPC")
+                    market_news = market_stock.news
+                    
+                    if market_news:
+                        news = market_news
+                    else:
+                        return pd.DataFrame(), f"No news found for {ticker} or market index."
+            
+            # If still no news, return empty dataframe
+            if not news:
+                return pd.DataFrame(), f"Unable to fetch news for {ticker}."
+        except Exception as e:
+            # If there's an error fetching, create a fallback with market news
+            try:
+                # Try to get news from market index as fallback
+                market_ticker = "^NSEI" if ticker.endswith('.NS') else "^BSESN" if ticker.endswith('.BO') else "^GSPC"
+                market_stock = yf.Ticker(market_ticker)
+                news = market_stock.news
+                
+                if not news:
+                    return pd.DataFrame(), f"Error fetching news for {ticker}: {str(e)}"
+            except:
+                return pd.DataFrame(), f"Error fetching news for {ticker}: {str(e)}"
         
         # Process news data - the structure has changed in recent yfinance versions
         processed_news = []

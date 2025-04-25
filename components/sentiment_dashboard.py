@@ -29,6 +29,15 @@ def render_sentiment_dashboard():
     Select a stock to see its sentiment analysis.
     """)
     
+    # Display the AI models used for sentiment analysis
+    st.info("""
+    **Sentiment Analysis Models**: This dashboard uses a combination of advanced NLP models:
+    - VADER (Valence Aware Dictionary and sEntiment Reasoner) - 70% weight
+    - TextBlob Sentiment Analysis - 30% weight
+    
+    These models analyze text to determine if sentiment is positive, negative, or neutral.
+    """)
+    
     # Stock selection
     col1, col2 = st.columns([1, 3])
     
