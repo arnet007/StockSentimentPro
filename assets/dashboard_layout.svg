@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#f5f7f9" />
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="1200" height="80" fill="#ffffff" />
+  <text x="30" y="50" font-family="Arial" font-size="24" font-weight="bold" fill="#333333">Stock Market Dashboard</text>
+  
+  <!-- Tab Navigation -->
+  <rect x="0" y="80" width="1200" height="40" fill="#eaeef2" />
+  <rect x="30" y="80" width="150" height="40" fill="#ffffff" />
+  <text x="70" y="105" font-family="Arial" font-size="16" fill="#0068c9">Stock Data</text>
+  <rect x="180" y="80" width="150" height="40" fill="#eaeef2" />
+  <text x="205" y="105" font-family="Arial" font-size="16" fill="#333333">Sentiment Analysis</text>
+  
+  <!-- Main Layout -->
+  <rect x="30" y="140" width="250" height="620" fill="#ffffff" rx="5" ry="5" />
+  <rect x="300" y="140" width="870" height="620" fill="#ffffff" rx="5" ry="5" />
+  
+  <!-- Left Panel - Stock Selection -->
+  <text x="50" y="170" font-family="Arial" font-size="18" font-weight="bold" fill="#333333">Select Stock</text>
+  
+  <rect x="50" y="190" width="210" height="40" fill="#f5f7f9" rx="3" ry="3" />
+  <text x="60" y="215" font-family="Arial" font-size="14" fill="#666666">Select Market</text>
+  
+  <rect x="50" y="245" width="210" height="40" fill="#f5f7f9" rx="3" ry="3" />
+  <text x="60" y="270" font-family="Arial" font-size="14" fill="#666666">Select Stock</text>
+  
+  <rect x="50" y="300" width="210" height="40" fill="#f5f7f9" rx="3" ry="3" />
+  <text x="60" y="325" font-family="Arial" font-size="14" fill="#666666">Custom Ticker</text>
+  
+  <text x="50" y="370" font-family="Arial" font-size="18" font-weight="bold" fill="#333333">Stock Info</text>
+  
+  <rect x="50" y="390" width="210" height="350" fill="#f5f7f9" rx="3" ry="3" />
+  <text x="70" y="420" font-family="Arial" font-size="16" font-weight="bold" fill="#333333">HDFC Bank Ltd</text>
+  <text x="70" y="450" font-family="Arial" font-size="14" fill="#666666">Market Cap: 14.63 T</text>
+  <text x="70" y="480" font-family="Arial" font-size="14" fill="#666666">P/E Ratio: 20.65</text>
+  <text x="70" y="510" font-family="Arial" font-size="14" fill="#666666">Dividend Yield: 1.15%</text>
+  
+  <!-- Main Chart Area -->
+  <text x="320" y="170" font-family="Arial" font-size="18" font-weight="bold" fill="#333333">HDFC Bank Ltd Stock Chart</text>
+  
+  <rect x="320" y="190" width="830" height="80" fill="#f5f7f9" rx="3" ry="3" />
+  <text x="340" y="220" font-family="Arial" font-size="14" font-weight="bold" fill="#333333">Current Price</text>
+  <text x="340" y="250" font-family="Arial" font-size="18" fill="#0068c9">1,908.00 INR</text>
+  
+  <text x="520" y="220" font-family="Arial" font-size="14" font-weight="bold" fill="#333333">Change</text>
+  <text x="520" y="250" font-family="Arial" font-size="18" fill="#e74c3c">-8.80 (-0.46%)</text>
+  
+  <!-- Chart Placeholder -->
+  <rect x="320" y="290" width="830" height="400" fill="#f5f7f9" rx="3" ry="3" />
+  <path d="M320,490 Q420,420 520,500 T720,400 T920,490 T1150,390" stroke="#0068c9" stroke-width="3" fill="none" />
+  <circle cx="320" cy="490" r="4" fill="#0068c9" />
+  <circle cx="520" cy="500" r="4" fill="#0068c9" />
+  <circle cx="720" cy="400" r="4" fill="#0068c9" />
+  <circle cx="920" cy="490" r="4" fill="#0068c9" />
+  <circle cx="1150" cy="390" r="4" fill="#0068c9" />
+  
+  <!-- Time Period Selection -->
+  <rect x="320" y="700" width="830" height="40" fill="#f5f7f9" rx="3" ry="3" />
+  <rect x="340" y="710" width="60" height="20" fill="#0068c9" rx="3" ry="3" />
+  <text x="358" y="725" font-family="Arial" font-size="12" fill="#ffffff">1D</text>
+  <rect x="410" y="710" width="60" height="20" fill="#f5f7f9" rx="3" ry="3" stroke="#0068c9" stroke-width="1" />
+  <text x="428" y="725" font-family="Arial" font-size="12" fill="#0068c9">5D</text>
+  <rect x="480" y="710" width="60" height="20" fill="#f5f7f9" rx="3" ry="3" stroke="#0068c9" stroke-width="1" />
+  <text x="498" y="725" font-family="Arial" font-size="12" fill="#0068c9">1M</text>
+  <rect x="550" y="710" width="60" height="20" fill="#f5f7f9" rx="3" ry="3" stroke="#0068c9" stroke-width="1" />
+  <text x="568" y="725" font-family="Arial" font-size="12" fill="#0068c9">6M</text>
+  <rect x="620" y="710" width="60" height="20" fill="#f5f7f9" rx="3" ry="3" stroke="#0068c9" stroke-width="1" />
+  <text x="638" y="725" font-family="Arial" font-size="12" fill="#0068c9">YTD</text>
+  <rect x="690" y="710" width="60" height="20" fill="#f5f7f9" rx="3" ry="3" stroke="#0068c9" stroke-width="1" />
+  <text x="708" y="725" font-family="Arial" font-size="12" fill="#0068c9">1Y</text>
+  <rect x="760" y="710" width="60" height="20" fill="#f5f7f9" rx="3" ry="3" stroke="#0068c9" stroke-width="1" />
+  <text x="778" y="725" font-family="Arial" font-size="12" fill="#0068c9">5Y</text>
+  <rect x="830" y="710" width="60" height="20" fill="#f5f7f9" rx="3" ry="3" stroke="#0068c9" stroke-width="1" />
+  <text x="848" y="725" font-family="Arial" font-size="12" fill="#0068c9">MAX</text>
+</svg>
