@@ -186,17 +186,27 @@ def get_stock_news(ticker, days=7, max_articles=10):
                     news_df['date'] = pd.to_datetime(news_df['date'])
                 except:
                     # If string conversion fails, provide a default recent date
-                    news_df['date'] = datetime.now()
+                    news_df['date'] = pd.to_datetime(datetime.now())
             else:
                 # Try to convert from unix timestamp
                 try:
                     news_df['date'] = pd.to_datetime(news_df['date'], unit='s')
                 except:
-                    news_df['date'] = datetime.now()
-                
-            # Filter by date
-            cutoff_date = datetime.now() - timedelta(days=days)
-            news_df = news_df[news_df['date'] >= cutoff_date]
+                    news_df['date'] = pd.to_datetime(datetime.now())
+            
+            # Convert datetime to UTC for consistent comparison
+            if hasattr(news_df['date'].dt, 'tz'):
+                # If timezone-aware, convert to UTC
+                news_df['date'] = news_df['date'].dt.tz_localize('UTC')
+            else:
+                # If naive datetime, assume UTC
+                news_df['date'] = news_df['date'].dt.tz_localize(None)
+            
+            # Create a timezone-aware cutoff date
+            cutoff_date = pd.to_datetime(datetime.now() - timedelta(days=days))
+            
+            # Filter by date - use timestamp comparison to avoid timezone issues
+            news_df = news_df[news_df['date'].dt.timestamp() >= cutoff_date.timestamp()]
             
             # Sort by date (newest first)
             news_df = news_df.sort_values('date', ascending=False)

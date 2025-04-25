@@ -258,15 +258,68 @@ def render_sentiment_dashboard():
                     # News table
                     st.subheader("Recent News Articles")
                     
+                    # Create a cleaner table layout for news articles
+                    st.markdown("""
+                    <style>
+                    .news-item {
+                        border-left: 5px solid;
+                        padding-left: 10px;
+                        margin-bottom: 15px;
+                        background-color: #f9f9f9;
+                        border-radius: 3px;
+                        padding: 10px 10px 10px 15px;
+                        word-wrap: break-word;
+                    }
+                    .news-title {
+                        font-size: 1.1rem;
+                        font-weight: bold;
+                        margin-bottom: 5px;
+                        word-wrap: break-word;
+                    }
+                    .news-meta {
+                        font-size: 0.85rem;
+                        color: #666;
+                        margin-top: 5px;
+                        margin-bottom: 5px;
+                    }
+                    .news-sentiment {
+                        font-weight: bold;
+                        padding: 2px 6px;
+                        border-radius: 3px;
+                        color: white;
+                        display: inline-block;
+                        margin-right: 5px;
+                    }
+                    </style>
+                    """, unsafe_allow_html=True)
+                    
                     for _, row in news_df.iterrows():
                         # Determine sentiment color
                         sentiment_color = SENTIMENT_COLORS.get(row['sentiment'], SENTIMENT_COLORS['neutral'])
+                        sentiment_text = row['sentiment'].upper()
+                        
+                        # Format date safely
+                        try:
+                            date_str = row['date'].strftime('%Y-%m-%d %H:%M')
+                        except:
+                            date_str = "N/A"
+                        
+                        # Safe link handling
+                        link = row.get('link', '#')
+                        if not link or link == '':
+                            link = '#'
+                            link_text = ''
+                        else:
+                            link_text = f'<a href="{link}" target="_blank">Read more</a>'
                         
                         st.markdown(f"""
-                        <div style="border-left: 5px solid {sentiment_color}; padding-left: 10px; margin-bottom: 10px;">
-                            <h4>{row['title']}</h4>
-                            <p><strong>Source:</strong> {row.get('publisher', 'Unknown')} | <strong>Date:</strong> {row['date'].strftime('%Y-%m-%d %H:%M')}</p>
-                            <p><a href="{row['link']}" target="_blank">Read more</a></p>
+                        <div class="news-item" style="border-left-color: {sentiment_color};">
+                            <div class="news-title">{row['title']}</div>
+                            <div class="news-meta">
+                                <span class="news-sentiment" style="background-color: {sentiment_color};">{sentiment_text}</span>
+                                <strong>Source:</strong> {row.get('publisher', 'Unknown')} | <strong>Date:</strong> {date_str}
+                            </div>
+                            <div>{link_text}</div>
                         </div>
                         """, unsafe_allow_html=True)
                 else:
@@ -354,14 +407,25 @@ def render_sentiment_dashboard():
                     tweets_df['engagement'] = tweets_df['likes'] + tweets_df['retweets']
                     sorted_tweets = tweets_df.sort_values('engagement', ascending=False)
                     
+                    # Apply similar styling to social media posts as news
                     for _, row in sorted_tweets.head(10).iterrows():
                         # Determine sentiment color
                         sentiment_color = SENTIMENT_COLORS.get(row['sentiment'], SENTIMENT_COLORS['neutral'])
+                        sentiment_text = row['sentiment'].upper()
+                        
+                        # Format date safely
+                        try:
+                            date_str = row['date'].strftime('%Y-%m-%d %H:%M')
+                        except:
+                            date_str = "N/A"
                         
                         st.markdown(f"""
-                        <div style="border-left: 5px solid {sentiment_color}; padding-left: 10px; margin-bottom: 10px;">
-                            <p>{row['text']}</p>
-                            <p><strong>Date:</strong> {row['date'].strftime('%Y-%m-%d %H:%M')} | <strong>Likes:</strong> {row['likes']} | <strong>Retweets:</strong> {row['retweets']}</p>
+                        <div class="news-item" style="border-left-color: {sentiment_color};">
+                            <div class="news-title">{row['text']}</div>
+                            <div class="news-meta">
+                                <span class="news-sentiment" style="background-color: {sentiment_color};">{sentiment_text}</span>
+                                <strong>Date:</strong> {date_str} | <strong>Likes:</strong> {row['likes']} | <strong>Retweets:</strong> {row['retweets']}
+                            </div>
                         </div>
                         """, unsafe_allow_html=True)
                 else:
