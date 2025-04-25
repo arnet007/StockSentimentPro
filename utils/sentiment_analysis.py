@@ -319,9 +319,9 @@ def get_sentiment_summary(ticker):
     Returns:
     dict: Dictionary containing sentiment summary
     """
-    # Get news and tweets with increased limits
+    # Get news and tweets with increased limits to ensure comprehensive analysis
     news_df, news_error = get_stock_news(ticker, days=14, max_articles=50)
-    tweets_df, tweets_error = get_stock_tweets(ticker, days=7, max_tweets=50)
+    tweets_df, tweets_error = get_stock_tweets(ticker, days=14, max_tweets=50)
     
     # Initialize summary
     summary = {

@@ -89,7 +89,7 @@ def render_sentiment_dashboard():
         days_back = st.select_slider(
             "Days to look back", 
             options=days_options,
-            value=7,
+            value=14,
             key="days_back_slider"
         )
         
@@ -103,8 +103,8 @@ def render_sentiment_dashboard():
                 st.session_state.sentiment_summary = sentiment_summary
                 
                 # Get news and tweets
-                news_df, news_error = get_stock_news(sentiment_ticker, days=days_back, max_articles=20)
-                tweets_df, tweets_error = get_stock_tweets(sentiment_ticker, days=days_back, max_tweets=30)
+                news_df, news_error = get_stock_news(sentiment_ticker, days=days_back, max_articles=50)
+                tweets_df, tweets_error = get_stock_tweets(sentiment_ticker, days=days_back, max_tweets=50)
                 
                 st.session_state.news_df = news_df
                 st.session_state.news_error = news_error
