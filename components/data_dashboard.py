@@ -120,10 +120,44 @@ def render_data_dashboard():
                 
         # Display stock information
         if info:
-            # Use markdown for company name to ensure it wraps properly
-            st.markdown(f"### {info.get('name', selected_ticker)}")
+            # Custom CSS for better text handling
+            st.markdown("""
+            <style>
+            .stock-header {
+                font-size: 1.5rem;
+                font-weight: bold;
+                margin-bottom: 10px;
+                word-wrap: break-word;
+                max-width: 100%;
+            }
+            .metric-container .st-emotion-cache-q8sbsg p {
+                white-space: normal !important;
+                word-wrap: break-word !important;
+                overflow-wrap: break-word !important;
+                font-size: 0.9rem !important;
+            }
+            .metric-container .st-emotion-cache-ocqkz7 {
+                white-space: normal !important;
+                word-wrap: break-word !important;
+                overflow-wrap: break-word !important;
+                font-size: 1.4rem !important;
+            }
+            .compact-info {
+                font-size: 0.9rem;
+                margin-top: 5px;
+                margin-bottom: 15px;
+            }
+            </style>
+            """, unsafe_allow_html=True)
+            
+            # Company name with custom class
+            st.markdown(
+                f"<div class='stock-header'>{info.get('name', selected_ticker)}</div>", 
+                unsafe_allow_html=True
+            )
             
             # Use 2 columns for metrics with better text wrapping
+            st.markdown("<div class='metric-container'>", unsafe_allow_html=True)
             metrics_col1, metrics_col2 = st.columns(2)
             
             with metrics_col1:
@@ -152,10 +186,13 @@ def render_data_dashboard():
                     info.get("dividendYieldFormatted", "N/A"),
                     help="Annual dividend as percentage of share price"
                 )
+            st.markdown("</div>", unsafe_allow_html=True)
             
             # Use more compact display for additional information
-            st.markdown(f"<div style='font-size:0.9em'>Exchange: <b>{info.get('exchange', 'N/A')}</b> | Sector: <b>{info.get('sector', 'N/A')}</b></div>", 
-                        unsafe_allow_html=True)
+            st.markdown(
+                f"<div class='compact-info'>Exchange: <b>{info.get('exchange', 'N/A')}</b> | Sector: <b>{info.get('sector', 'N/A')}</b></div>", 
+                unsafe_allow_html=True
+            )
             
             # Comparison section
             st.subheader("Compare with")

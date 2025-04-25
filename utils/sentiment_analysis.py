@@ -135,11 +135,31 @@ def get_stock_news(ticker, days=7, max_articles=10):
             # Check if item has nested content structure (new format)
             if 'content' in item and isinstance(item['content'], dict):
                 content = item['content']
+                # Extract title and ensure it's not None
+                title = content.get('title', 'No title')
+                if title is None:
+                    title = 'No title'
+                
+                # Extract publisher from provider
+                publisher = 'Unknown'
+                provider = content.get('provider', {})
+                if isinstance(provider, dict):
+                    publisher = provider.get('displayName', 'Unknown')
+                
+                # Extract link from clickThroughUrl
+                link = ''
+                clickThroughUrl = content.get('clickThroughUrl', {})
+                if isinstance(clickThroughUrl, dict):
+                    link = clickThroughUrl.get('url', '')
+                
+                # Extract date from pubDate or displayTime
+                date = content.get('pubDate', content.get('displayTime', ''))
+                
                 news_item = {
-                    'title': content.get('title', 'No title'),
-                    'publisher': content.get('provider', {}).get('displayName', 'Unknown'),
-                    'link': content.get('clickThroughUrl', {}).get('url', ''),
-                    'date': content.get('pubDate', content.get('displayTime', '')),
+                    'title': title,
+                    'publisher': publisher,
+                    'link': link,
+                    'date': date,
                 }
                 processed_news.append(news_item)
             # Fallback for older format

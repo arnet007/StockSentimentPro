@@ -115,13 +115,39 @@ def render_sentiment_dashboard():
         if 'sentiment_summary' in st.session_state:
             summary = st.session_state.sentiment_summary
             
-            # Display overall sentiment
+            # Add custom CSS for better text handling
+            st.markdown("""
+            <style>
+            .sentiment-card {
+                border-radius: 10px;
+                padding: 10px;
+                color: white;
+                text-align: center;
+                margin-bottom: 10px;
+                word-wrap: break-word;
+            }
+            .sentiment-card h3 {
+                font-size: 1.1rem;
+                margin-bottom: 5px;
+                white-space: normal;
+                word-wrap: break-word;
+            }
+            .sentiment-card h2 {
+                font-size: 1.4rem;
+                margin-top: 0;
+                white-space: normal;
+                word-wrap: break-word;
+            }
+            </style>
+            """, unsafe_allow_html=True)
+            
+            # Display overall sentiment with improved layout
             sentiment_col1, sentiment_col2, sentiment_col3 = st.columns([1, 1, 1])
             
             with sentiment_col1:
                 overall_color = SENTIMENT_COLORS.get(summary['overall_sentiment'], SENTIMENT_COLORS['neutral'])
                 st.markdown(f"""
-                <div style="border-radius:10px; padding:10px; background-color:{overall_color}; color:white; text-align:center;">
+                <div class="sentiment-card" style="background-color:{overall_color};">
                     <h3>Overall Sentiment</h3>
                     <h2>{summary['overall_sentiment'].upper()}</h2>
                 </div>
@@ -130,7 +156,7 @@ def render_sentiment_dashboard():
             with sentiment_col2:
                 news_color = SENTIMENT_COLORS.get(summary['news_sentiment'], SENTIMENT_COLORS['neutral'])
                 st.markdown(f"""
-                <div style="border-radius:10px; padding:10px; background-color:{news_color}; color:white; text-align:center;">
+                <div class="sentiment-card" style="background-color:{news_color};">
                     <h3>News Sentiment</h3>
                     <h2>{summary['news_sentiment'].upper()}</h2>
                 </div>
@@ -139,8 +165,8 @@ def render_sentiment_dashboard():
             with sentiment_col3:
                 social_color = SENTIMENT_COLORS.get(summary['social_sentiment'], SENTIMENT_COLORS['neutral'])
                 st.markdown(f"""
-                <div style="border-radius:10px; padding:10px; background-color:{social_color}; color:white; text-align:center;">
-                    <h3>Social Media Sentiment</h3>
+                <div class="sentiment-card" style="background-color:{social_color};">
+                    <h3>Social Media</h3>
                     <h2>{summary['social_sentiment'].upper()}</h2>
                 </div>
                 """, unsafe_allow_html=True)
